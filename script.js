@@ -19,7 +19,7 @@ const caseLog = [
       "Document the full build on GitHub"
     ],
     outcome:
-      "In progress — lab environment currently being provisioned. Full writeup will ship to GitHub on completion.",
+      "lab provisioning in progress — full detection writeup ships to GitHub on completion",
     tags: ["Splunk", "SPL", "dnscat2", "VirtualBox", "Ubuntu Server"],
     links: []
   },
@@ -40,7 +40,7 @@ const caseLog = [
       "Performed email header forensics comparing SPF/DKIM/DMARC failures between the phishing email and a legitimate one"
     ],
     outcome:
-      "Full attack chain executed and detected end-to-end, including real IOC identification and protocol-level email forensics — not just log correlation.",
+      "captured X-Server: gophish IOC, mapped to T1566.002 / T1056.003 / T1071.001 — full chain detected, not just simulated",
     tags: ["GoPhish", "MailHog", "Zeek", "Wireshark", "Splunk", "VirtualBox"],
     links: [
       { label: "View on GitHub", href: "https://github.com/Robertnile/phishing-simulation-lab" }
@@ -63,7 +63,7 @@ const caseLog = [
       "Produced a full remediation table with countermeasures per technique, plus a lessons-learned write-up"
     ],
     outcome:
-      "Assessed as the strongest of the three flagship projects on documentation quality. The remediation table and write-up reflect SOC analyst methodology, not just tool usage.",
+      "11/11 techniques hunted and remediated — strongest documentation of the three flagship labs",
     tags: ["Velociraptor", "VQL", "Linux", "Windows", "Threat Hunting"],
     links: [
       { label: "View on GitHub", href: "https://github.com/Robertnile/velociraptor-threat-hunting-lab" }
@@ -86,7 +86,7 @@ const caseLog = [
       "Authored four IR playbooks (PB-001–004) following the PICERL framework, plus a full REPORT.md"
     ],
     outcome:
-      "First flagship project — established the detection engineering and PICERL-based documentation workflow used in every lab since.",
+      "4/4 attack scenarios detected with real-time Splunk alerts — established the PICERL workflow used in every lab since",
     tags: ["Splunk", "Metasploitable3", "Zeek", "MITRE ATT&CK", "IR Playbooks"],
     links: [
       { label: "View on GitHub", href: "https://github.com/Robertnile/splunk-metasploitable-lab" }
@@ -132,7 +132,7 @@ function renderTickets() {
             </div>
             <div class="case-field">
               <h4>Outcome</h4>
-              <p>${c.outcome}</p>
+              <div class="outcome-line"><span class="prompt">$ →</span><span>${c.outcome}</span></div>
             </div>
           </div>
           <div class="case-side">
