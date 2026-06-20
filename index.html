@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Robert Chimuanya Nwodu — SOC Analyst Portfolio</title>
+<meta name="description" content="SOC Analyst Trainee portfolio — threat detection, incident response, SIEM engineering, and DFIR labs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- scanline / noise overlay -->
+<div class="noise-overlay" aria-hidden="true"></div>
+
+<!-- ============ NAV ============ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="#top" class="brand">
+      <span class="brand-prompt">~$</span> robertnile
+    </a>
+    <nav class="topnav">
+      <a href="#about">about</a>
+      <a href="#cases">case-log</a>
+      <a href="#skills">stack</a>
+      <a href="#certs">certs</a>
+      <a href="#contact">contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="hero-status">
+        <span class="dot"></span> status: open to work
+      </p>
+      <h1 class="hero-title">
+        Robert Chimuanya Nwodu<span class="cursor">_</span>
+      </h1>
+      <p class="hero-role">IT Security Analyst — SOC Operations &amp; Incident Response</p>
+      <p class="hero-blurb">
+        I build home-lab SOC environments end to end — attack simulation, log pipelines, SPL/VQL detections,
+        and the documentation a real blue team would expect to find behind them. Based in Nigeria, working remote.
+      </p>
+      <div class="hero-actions">
+        <a href="#cases" class="btn btn-primary">View case log</a>
+        <a href="assets/resume.pdf" class="btn btn-ghost" download>Download résumé</a>
+      </div>
+    </div>
+    <div class="hero-panel" aria-hidden="true">
+      <div class="panel-head">
+        <span class="panel-dot red"></span><span class="panel-dot yellow"></span><span class="panel-dot green"></span>
+        <span class="panel-title">queue.log</span>
+      </div>
+      <pre class="panel-body" id="terminal-feed"></pre>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about" class="section">
+    <p class="section-eyebrow">// about</p>
+    <div class="about-grid">
+      <div class="about-text">
+        <h2>From the queue to the writeup</h2>
+        <p>
+          I'm training as an IT Security Analyst, currently a SOC Analyst Trainee at Luke Tech Limited
+          (Canada, remote) working from Nigeria. My background is
+          self-directed: every lab on this page started as "how would I actually detect this?" and ended with
+          a working pipeline, a set of SPL or VQL queries, and a report I'd be comfortable handing to a hiring
+          manager.
+        </p>
+        <p>
+          I care about understanding <em>why</em> a detection works, not just copying a query that does. That
+          means reading the protocol spec before writing the Zeek signature, and debugging the VQL aggregate
+          function until I understand what it's actually doing under the hood.
+        </p>
+        <p>
+          Currently working toward CompTIA Security+ and ISC2 CC, and building a DNS tunneling detection lab
+          in Splunk as my fourth flagship project.
+        </p>
+      </div>
+      <div class="about-stat-rail">
+        <div class="stat-row">
+          <span class="stat-num">04</span>
+          <span class="stat-label">home-lab projects shipped</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-num">11</span>
+          <span class="stat-label">attack techniques covered in DFIR lab</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-num">4</span>
+          <span class="stat-label">IR playbooks written, following PICERL</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CASE LOG (Projects) ============ -->
+  <section id="cases" class="section">
+    <p class="section-eyebrow">// case log</p>
+    <h2 class="section-title">Investigations &amp; lab builds</h2>
+    <p class="section-sub">Click a ticket to expand the full case detail.</p>
+
+    <div class="ticket-queue" id="ticket-queue">
+      <!-- Tickets injected by JS from data, see script.js -->
+    </div>
+  </section>
+
+  <!-- ============ STACK (Skills) ============ -->
+  <section id="skills" class="section">
+    <p class="section-eyebrow">// stack</p>
+    <h2 class="section-title">Tools &amp; technologies</h2>
+
+    <div class="stack-grid">
+      <div class="stack-col">
+        <h3>SIEM &amp; Detection</h3>
+        <ul class="tag-list">
+          <li>Splunk</li>
+          <li>SPL</li>
+          <li>Zeek</li>
+          <li>Wireshark</li>
+          <li>Velociraptor / VQL</li>
+        </ul>
+      </div>
+      <div class="stack-col">
+        <h3>Offense (for understanding defense)</h3>
+        <ul class="tag-list">
+          <li>Metasploit / Metasploitable3</li>
+          <li>Kali Linux</li>
+          <li>GoPhish</li>
+          <li>dnscat2</li>
+          <li>Nmap</li>
+        </ul>
+      </div>
+      <div class="stack-col">
+        <h3>Frameworks &amp; Process</h3>
+        <ul class="tag-list">
+          <li>MITRE ATT&amp;CK</li>
+          <li>Incident Response Playbooks</li>
+          <li>PICERL Framework</li>
+        </ul>
+      </div>
+      <div class="stack-col">
+        <h3>Infra &amp; Scripting</h3>
+        <ul class="tag-list">
+          <li>VirtualBox</li>
+          <li>Ubuntu Server</li>
+          <li>SQL</li>
+          <li>Bash</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CERTS ============ -->
+  <section id="certs" class="section">
+    <p class="section-eyebrow">// certifications</p>
+    <h2 class="section-title">In progress</h2>
+    <div class="cert-row">
+      <div class="cert-card">
+        <p class="cert-status status-progress">in progress</p>
+        <h3>CompTIA Security+</h3>
+        <p>Studying with Professor Messer and Jason Dion courseware.</p>
+      </div>
+      <div class="cert-card">
+        <p class="cert-status status-progress">in progress</p>
+        <h3>ISC2 Certified in Cybersecurity (CC)</h3>
+        <p>Foundational security domains and entry-level governance.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" class="section section-contact">
+    <p class="section-eyebrow">// contact</p>
+    <h2 class="section-title">Let's talk</h2>
+    <p class="section-sub">
+      Open to fully remote SOC / Blue Team roles. Reach out directly or find the work on GitHub.
+    </p>
+    <div class="contact-links">
+      <a href="https://www.linkedin.com/in/robertchimuanyanwodu" target="_blank" rel="noopener">
+        <span class="link-label">LinkedIn</span>
+        <span class="link-value">in/robertchimuanyanwodu</span>
+      </a>
+      <a href="https://github.com/Robertnile" target="_blank" rel="noopener">
+        <span class="link-label">GitHub</span>
+        <span class="link-value">github.com/Robertnile</span>
+      </a>
+      <a href="mailto:chimuanyanwodu200@gmail.com">
+        <span class="link-label">Email</span>
+        <span class="link-value">chimuanyanwodu200@gmail.com</span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>Built from scratch &amp; deployed on GitHub Pages. <span class="cursor">_</span></p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
