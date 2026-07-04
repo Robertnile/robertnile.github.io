@@ -4,24 +4,27 @@
 const caseLog = [
   {
     id: "CASE-004",
-    name: "DNS Tunneling Detection Lab",
-    tagline: "Splunk · dnscat2 · in progress",
-    severity: "medium",
-    severityLabel: "in build",
-    status: "phase 1/5",
+    name: "Tunneling in Plain Sight",
+    tagline: "dnscat2 · Zeek · Splunk",
+    severity: "resolved",
+    severityLabel: "resolved",
+    status: "documented",
     summary:
-      "A five-phase home lab built to simulate and detect DNS tunneling-based C2 traffic — from attack simulation through to a documented Splunk dashboard.",
+      "A full DNS tunneling attack simulated across 4 VMs — establishing an encrypted C2 channel over DNS, achieving a root shell on the victim, and catching the entire attack chain with three independent behavioral detections in Splunk.",
     chain: [
-      "Provision Ubuntu Server 22.04 LTS client VM in VirtualBox",
-      "Simulate C2 traffic over DNS using dnscat2",
-      "Write SPL detection queries for tunneling indicators (query entropy, volume, TXT record anomalies)",
-      "Build a Splunk dashboard with alerting",
-      "Document the full build on GitHub"
+      "Deployed dnscat2 server on Kali and client on victim VM (192.168.122.13), establishing an encrypted C2 session over UDP port 53 using TXT, MX, and CNAME record types",
+      "Achieved interactive root shell on victim machine entirely through DNS — no direct TCP/UDP connection ever existed",
+      "Discovered and fixed a critical Zeek TSV field parsing issue in props.conf (FIELD_HEADER_REGEX) that caused all Splunk field names to misalign — documented as a required fix for any Zeek/Splunk deployment",
+      "Built Detection 1: unusual DNS record types (TXT/MX/CNAME) — 666 events, all from a single source IP, mapped to T1071.004",
+      "Built Detection 2: encoded query length — 22 queries at 240 characters, fixed-size chunks confirming automated payload encoding, mapped to T1572",
+      "Built Detection 3: high-volume query rate — 3,978 queries at 0.627s average interval, tuned for interactive C2 shells rather than periodic beaconing, mapped to T1048.003"
     ],
     outcome:
-      "lab provisioning in progress — full detection writeup ships to GitHub on completion",
-    tags: ["Splunk", "SPL", "dnscat2", "VirtualBox", "Ubuntu Server"],
-    links: []
+      "root shell over DNS confirmed · T1071.004 / T1572 / T1048.003 detected behaviorally — OS-agnostic, no signatures required",
+    tags: ["dnscat2", "Zeek", "Splunk", "SPL", "VirtualBox"],
+    links: [
+      { label: "View on GitHub", href: "https://github.com/Robertnile/Tunneling-in-Plain-Sight-Detecting-DNS-C2-with-Zeek-and-Splunk" }
+    ]
   },
   {
     id: "CASE-003",
@@ -162,7 +165,7 @@ const feedLines = [
   { text: "[09:14:03] case CASE-001 :: status=resolved", cls: "line-muted" },
   { text: "[09:14:03] case CASE-002 :: status=resolved", cls: "line-muted" },
   { text: "[09:14:04] case CASE-003 :: status=resolved", cls: "line-muted" },
-  { text: "[09:14:05] case CASE-004 :: status=in_progress", cls: "line-warn" },
+  { text: "[09:14:05] case CASE-004 :: status=resolved", cls: "line-muted" },
   { text: "[09:14:06] detection coverage: SSH brute force, recon,", cls: "line-muted" },
   { text: "           C2/reverse shell, privesc, phishing,", cls: "line-muted" },
   { text: "           DFIR (11 techniques)", cls: "line-muted" },
