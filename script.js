@@ -5,25 +5,26 @@ const caseLog = [
   {
     id: "CASE-004",
     name: "Tunneling in Plain Sight",
-    tagline: "dnscat2 · Zeek · Splunk",
+    tagline: "dnscat2 · Meterpreter · Zeek · Splunk",
     severity: "resolved",
     severityLabel: "resolved",
     status: "documented",
     summary:
-      "A full DNS tunneling attack simulated across 4 VMs — establishing an encrypted C2 channel over DNS, achieving a root shell on the victim, and catching the entire attack chain with three independent behavioral detections in Splunk.",
+      "A two-part C2 detection lab built across 4 VMs — DNS tunneling (dnscat2) and HTTPS C2 (Meterpreter) — both caught using behavioral detections in Splunk via Zeek logs. No signatures. OS-agnostic. Same methodology, two different protocols.",
     chain: [
-      "Deployed dnscat2 server on Kali and client on victim VM (192.168.122.13), establishing an encrypted C2 session over UDP port 53 using TXT, MX, and CNAME record types",
-      "Achieved interactive root shell on victim machine entirely through DNS — no direct TCP/UDP connection ever existed",
+      "Deployed dnscat2 server on Kali and client on victim VM, establishing an encrypted C2 session over UDP port 53 — achieved interactive root shell entirely through DNS with no direct TCP/UDP connection",
       "Discovered and fixed a critical Zeek TSV field parsing issue in props.conf (FIELD_HEADER_REGEX) that caused all Splunk field names to misalign — documented as a required fix for any Zeek/Splunk deployment",
-      "Built Detection 1: unusual DNS record types (TXT/MX/CNAME) — 666 events, all from a single source IP, mapped to T1071.004",
-      "Built Detection 2: encoded query length — 22 queries at 240 characters, fixed-size chunks confirming automated payload encoding, mapped to T1572",
-      "Built Detection 3: high-volume query rate — 3,978 queries at 0.627s average interval, tuned for interactive C2 shells rather than periodic beaconing, mapped to T1048.003"
+      "Built three behavioral DNS detections: unusual record types (666 events, T1071.004), encoded query length (240-char payloads, T1572), and high-volume query rate (3,978 queries at 0.627s avg, T1048.003)",
+      "Extended the lab to HTTPS C2 using Meterpreter reverse HTTPS — generated payload with msfvenom, established session over port 4443, achieved root shell via encrypted channel",
+      "Added zeek:ssl sourcetype to Splunk pipeline and built three HTTPS detections: self-signed certificate (183 events, T1573.002), repeated connections to same internal destination (215 events, T1071.001), and beaconing interval (1,244 connections at 2.03s avg)",
+      "Documented detection limits: CV-based beaconing fails for interactive C2 shells; valid certs on port 443 defeat cert-based detection — beaconing interval survives both"
     ],
     outcome:
-      "root shell over DNS confirmed · T1071.004 / T1572 / T1048.003 detected behaviorally — OS-agnostic, no signatures required",
-    tags: ["dnscat2", "Zeek", "Splunk", "SPL", "VirtualBox"],
+      "root shell confirmed over DNS and HTTPS · 6 behavioral detections across 2 protocols — encryption hides the payload, not the behavior",
+    tags: ["dnscat2", "Metasploit", "Meterpreter", "Zeek", "Splunk", "SPL", "VirtualBox"],
     links: [
-      { label: "View on GitHub", href: "https://github.com/Robertnile/Tunneling-in-Plain-Sight-Detecting-DNS-C2-with-Zeek-and-Splunk" }
+      { label: "DNS Tunneling README", href: "https://github.com/Robertnile/Tunneling-in-Plain-Sight-Detecting-DNS-C2-with-Zeek-and-Splunk/blob/main/README.md" },
+      { label: "HTTPS C2 README", href: "https://github.com/Robertnile/Tunneling-in-Plain-Sight-Detecting-DNS-C2-with-Zeek-and-Splunk/blob/main/README-HTTPS-C2.md" }
     ]
   },
   {
@@ -168,7 +169,7 @@ const feedLines = [
   { text: "[09:14:05] case CASE-004 :: status=resolved", cls: "line-muted" },
   { text: "[09:14:06] detection coverage: SSH brute force, recon,", cls: "line-muted" },
   { text: "           C2/reverse shell, privesc, phishing,", cls: "line-muted" },
-  { text: "           DFIR (11 techniques)", cls: "line-muted" },
+  { text: "           DFIR (11 techniques), HTTPS C2", cls: "line-muted" },
   { text: "[09:14:07] open_to_work = true", cls: "" },
   { text: "[09:14:08] location = Nigeria (remote)", cls: "" },
   { text: "[09:14:09] _", cls: "" }
