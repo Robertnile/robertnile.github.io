@@ -3,6 +3,32 @@
    =========================================================== */
 const caseLog = [
   {
+    id: "CASE-005",
+    name: "AgentTesla JS Dropper",
+    tagline: "REMnux · Hybrid Analysis · VirusTotal",
+    severity: "resolved",
+    severityLabel: "resolved",
+    status: "documented",
+    summary:
+      "Static and dynamic analysis of a malicious JavaScript dropper (Quotation.js) delivering the AgentTesla infostealer. The sample used 65,573 lines of junk obfuscation, WMI silent execution, Startup folder persistence, and a disguised PNG payload from a compromised Peruvian server. Threat Score: 100/100. VirusTotal: 31/60 engines.",
+    chain: [
+      "Acquired sample from MalwareBazaar, transferred to isolated REMnux VM via Python HTTP server on a host-only network — no internet exposure during analysis",
+      "Ran file and exiftool — confirmed Unicode UTF-8 JS file, 1.57 MB, 65,573 lines, Windows CRLF newlines — file size vs zip size (8.4 KB) immediately flagged heavy obfuscation",
+      "Identified junk obfuscation technique: thousands of empty switch(1)/case 1 blocks accumulating empty strings in a windling variable — pure noise designed to exhaust sandbox timeouts (T1497)",
+      "Grepped through obfuscation to find ActiveX objects (Scripting.FileSystemObject, WScript.Shell), Startup folder self-copy persistence (T1547.001), and a Base64-encoded C2 URL embedded in the triumvir variable",
+      "Decoded the C2 URL: https://magsa.com.pe/sorma/MSI PRO.png — payload disguised as a PNG image to bypass proxy content inspection (T1036)",
+      "Traced WMI execution chain: PowerShell script assembled in the binotonous variable → stored in $env:interossicular environment variable → WMI spawns hidden PowerShell with ShowWindow = 0 (T1047 + T1564.003)",
+      "Submitted to Hybrid Analysis (Falcon Sandbox) — Threat Score 100/100, classified Trojan.Cryxos.JS, 222 MITRE ATT&CK indicators mapped; network analysis revealed caspol.exe (LOLBin) contacting ip-api.com for victim geolocation (T1016)",
+      "VirusTotal confirmed 31/60 detections across CAPE Sandbox, Yomi Hunter, and Zenbox — dynamic analysis uncovered a second payload URL (img_162829.png) not found during static analysis"
+    ],
+    outcome:
+      "full attack chain mapped: JS dropper → WMI silent PowerShell → AgentTesla payload · 31/60 VT · 100/100 threat score · C2 extracted statically",
+    tags: ["REMnux", "ExifTool", "Hybrid Analysis", "VirusTotal", "MalwareBazaar", "VirtualBox", "MITRE ATT&CK"],
+    links: [
+      { label: "View on GitHub", href: "https://github.com/Robertnile/case-005-agenttesla-js-dropper" }
+    ]
+  },
+  {
     id: "CASE-004",
     name: "Tunneling in Plain Sight",
     tagline: "dnscat2 · Meterpreter · Zeek · Splunk",
@@ -167,12 +193,14 @@ const feedLines = [
   { text: "[09:14:03] case CASE-002 :: status=resolved", cls: "line-muted" },
   { text: "[09:14:04] case CASE-003 :: status=resolved", cls: "line-muted" },
   { text: "[09:14:05] case CASE-004 :: status=resolved", cls: "line-muted" },
-  { text: "[09:14:06] detection coverage: SSH brute force, recon,", cls: "line-muted" },
+  { text: "[09:14:06] case CASE-005 :: status=resolved", cls: "line-muted" },
+  { text: "[09:14:07] detection coverage: SSH brute force, recon,", cls: "line-muted" },
   { text: "           C2/reverse shell, privesc, phishing,", cls: "line-muted" },
-  { text: "           DFIR (11 techniques), HTTPS C2", cls: "line-muted" },
-  { text: "[09:14:07] open_to_work = true", cls: "" },
-  { text: "[09:14:08] location = Nigeria (remote)", cls: "" },
-  { text: "[09:14:09] _", cls: "" }
+  { text: "           DFIR (11 techniques), HTTPS C2,", cls: "line-muted" },
+  { text: "           malware analysis (JS dropper)", cls: "line-muted" },
+  { text: "[09:14:08] open_to_work = true", cls: "" },
+  { text: "[09:14:09] location = Nigeria (remote)", cls: "" },
+  { text: "[09:14:10] _", cls: "" }
 ];
 
 function typeFeed() {
