@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>CASE-004: Tunneling in Plain Sight — Robert Nwodu</title>
+<meta name="description" content="Tunneling in Plain Sight — dnscat2 · Meterpreter · Zeek · Splunk">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg:         #F8F9FB;
+  --surface:    #FFFFFF;
+  --surface-2:  #F1F4F8;
+  --border:     #E2E8F0;
+  --text:       #0F172A;
+  --muted:      #64748B;
+  --light:      #94A3B8;
+  --accent:     #1E40AF;
+  --accent-2:   #3B82F6;
+  --accent-bg:  #EFF6FF;
+  --green:      #15803D;
+  --green-bg:   #F0FDF4;
+  --green-bd:   #86EFAC;
+  --amber:      #B45309;
+  --amber-bg:   #FFFBEB;
+  --amber-bd:   #FCD34D;
+  --font:       'Inter', system-ui, sans-serif;
+  --mono:       'JetBrains Mono', monospace;
+  --max:        1080px;
+  --r:          10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+img{display:block;max-width:100%;}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;transition-duration:.001ms!important;}}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;background:rgba(248,249,251,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+.nav-inner{max-width:var(--max);margin:0 auto;padding:0 28px;height:64px;display:flex;align-items:center;justify-content:space-between;}
+.nav-brand{font-weight:800;font-size:16px;letter-spacing:-.02em;}
+.nav-brand span{color:var(--accent-2);}
+.nav-links{display:flex;gap:30px;font-size:14px;font-weight:500;color:var(--muted);}
+.nav-links a:hover{color:var(--accent);}
+.nav-btn{background:var(--accent);color:#fff;padding:9px 20px;border-radius:var(--r);font-size:13px;font-weight:700;transition:background .15s;}
+.nav-btn:hover{background:var(--accent-2);color:#fff!important;}
+
+/* FOOTER */
+.footer{border-top:1px solid var(--border);padding:32px 28px;text-align:center;font-size:13px;color:var(--light);}
+
+/* UTILS */
+.wrap{max-width:var(--max);margin:0 auto;padding:0 28px;}
+.section{padding:80px 0;}
+.section+.section{border-top:1px solid var(--border);}
+.eyebrow{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--accent-2);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;}
+.heading{font-size:clamp(24px,3vw,34px);font-weight:800;letter-spacing:-.025em;line-height:1.15;margin-bottom:10px;}
+.subhead{font-size:15px;color:var(--muted);margin-bottom:44px;max-width:600px;}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:5px 13px;border-radius:999px;}
+.badge-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd);}
+.badge-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd);}
+.badge-blue{background:var(--accent-bg);color:var(--accent);border:1px solid #BFDBFE;}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor;animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+
+@media(max-width:860px){
+  .nav-links{display:none;}
+  .wrap{padding:0 20px;}
+  .section{padding:56px 0;}
+}
+</style>
+
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">Robert <span>Nwodu</span></a>
+    <div class="nav-links"><a href="#about">About</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#certs">Certifications</a><a href="#contact">Contact</a></div>
+    <a href="assets/resume.pdf" class="nav-btn" download>Download CV</a>
+  </div>
+</nav>
+<section style="background:var(--surface);border-bottom:1px solid var(--border);padding:56px 0 48px;">
+<div class="wrap">
+  <a href="../index.html#projects" style="font-family:var(--mono);font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:6px;margin-bottom:28px;">← Back to case log</a>
+  <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap;">
+    <span style="font-family:var(--mono);font-size:12px;font-weight:600;color:var(--light);background:var(--surface-2);padding:5px 12px;border-radius:5px;">CASE-004</span>
+    <span class="badge badge-green">Resolved · Documented</span>
+  </div>
+  <h1 style="font-size:clamp(26px,4vw,42px);font-weight:800;letter-spacing:-.025em;line-height:1.1;margin-bottom:12px;">Tunneling in Plain Sight</h1>
+  <p style="font-size:16px;color:var(--muted);margin-bottom:28px;">dnscat2 · Meterpreter · Zeek · Splunk</p>
+  <div style="display:flex;flex-wrap:wrap;gap:8px;"><span style="font-family:var(--mono);font-size:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:5px;">dnscat2</span><span style="font-family:var(--mono);font-size:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:5px;">Metasploit</span><span style="font-family:var(--mono);font-size:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:5px;">Meterpreter</span><span style="font-family:var(--mono);font-size:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:5px;">Zeek</span><span style="font-family:var(--mono);font-size:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:5px;">Splunk</span><span style="font-family:var(--mono);font-size:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:5px;">SPL</span><span style="font-family:var(--mono);font-size:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:5px;">VirtualBox</span></div>
+</div>
+</section>
+
+<section style="padding:56px 0;">
+<div class="wrap">
+  <div style="display:grid;grid-template-columns:1fr 280px;gap:48px;align-items:start;">
+    <div>
+      <h2 style="font-size:20px;font-weight:800;letter-spacing:-.015em;margin-bottom:14px;">Overview</h2>
+      <p style="font-size:15.5px;color:var(--muted);line-height:1.8;margin-bottom:40px;">A two-part C2 detection lab built across 4 VMs — DNS tunneling (dnscat2) and HTTPS C2 (Meterpreter) — both caught using behavioral detections in Splunk via Zeek logs. No signatures. OS-agnostic. Same methodology, two different protocols. The key finding: encryption hides the payload, not the behavior.</p>
+
+      <h2 style="font-size:20px;font-weight:800;letter-spacing:-.015em;margin-bottom:18px;">Attack Chain / Build Steps</h2>
+      <ol style="padding-left:22px;margin-bottom:40px;"><li style="font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:10px;padding-left:4px;">Deployed dnscat2 server on Kali and client on victim VM, establishing an encrypted C2 session over UDP port 53 — interactive root shell entirely through DNS with no direct TCP/UDP connection.</li><li style="font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:10px;padding-left:4px;">Discovered and fixed a critical Zeek TSV field parsing issue in props.conf (FIELD_HEADER_REGEX) causing all Splunk field names to misalign — documented as a required fix for any Zeek/Splunk deployment.</li><li style="font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:10px;padding-left:4px;">Built three behavioral DNS detections: unusual record types (666 events, T1071.004), encoded query length (240-char payloads, T1572), and high-volume query rate (3,978 queries at 0.627s avg, T1048.003).</li><li style="font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:10px;padding-left:4px;">Extended the lab to HTTPS C2 using Meterpreter reverse HTTPS — generated payload with msfvenom, established session over port 4443, achieved root shell via encrypted channel.</li><li style="font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:10px;padding-left:4px;">Added zeek:ssl sourcetype to Splunk pipeline and built three HTTPS detections: self-signed certificate (183 events, T1573.002), repeated connections to same destination (215 events, T1071.001), and beaconing interval (1,244 connections at 2.03s avg).</li><li style="font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:10px;padding-left:4px;">Documented detection limits: CV-based beaconing fails for interactive C2 shells; valid certs on port 443 defeat cert-based detection — beaconing interval analysis survives both scenarios.</li></ol>
+
+      <h2 style="font-size:20px;font-weight:800;letter-spacing:-.015em;margin-bottom:14px;">Outcome</h2>
+      <div style="background:var(--accent-bg);border:1px solid #BFDBFE;border-radius:var(--r);padding:18px 22px;font-family:var(--mono);font-size:14px;color:var(--accent);line-height:1.65;margin-bottom:40px;">Root shell confirmed over DNS and HTTPS · 6 behavioral detections across 2 protocols · Zeek/Splunk parsing bug discovered and documented as a required environment fix.</div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:12px;"><a href="https://github.com/Robertnile/Tunneling-in-Plain-Sight-Detecting-DNS-C2-with-Zeek-and-Splunk/blob/main/README.md" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:#fff;padding:11px 20px;border-radius:var(--r);font-size:13.5px;font-weight:700;transition:background .15s;" onmouseover="this.style.background='#1D4ED8'" onmouseout="this.style.background='var(--accent)'">DNS Tunneling README →</a><a href="https://github.com/Robertnile/Tunneling-in-Plain-Sight-Detecting-DNS-C2-with-Zeek-and-Splunk/blob/main/README-HTTPS-C2.md" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:#fff;padding:11px 20px;border-radius:var(--r);font-size:13.5px;font-weight:700;transition:background .15s;" onmouseover="this.style.background='#1D4ED8'" onmouseout="this.style.background='var(--accent)'">HTTPS C2 README →</a></div>
+    </div>
+
+    <div style="position:sticky;top:80px;display:flex;flex-direction:column;gap:14px;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;">
+        <div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent-2);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px;">Tools Used</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;"><span style="font-family:var(--mono);font-size:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:5px;">dnscat2</span><span style="font-family:var(--mono);font-size:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:5px;">Metasploit</span><span style="font-family:var(--mono);font-size:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:5px;">Meterpreter</span><span style="font-family:var(--mono);font-size:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:5px;">Zeek</span><span style="font-family:var(--mono);font-size:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:5px;">Splunk</span><span style="font-family:var(--mono);font-size:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:5px;">SPL</span><span style="font-family:var(--mono);font-size:12px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:5px;">VirtualBox</span></div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;">
+        <div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent-2);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px;">Analyst</div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <img src="..//9j/4AAQSkZJRgABAQAAAQABAAD/2w..." style="display:none">
+          <div style="width:40px;height:40px;border-radius:50%;background:var(--accent-bg);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--accent);flex-shrink:0;">RN</div>
+          <div>
+            <div style="font-weight:700;font-size:13.5px;">Robert Nwodu</div>
+            <div style="font-size:12px;color:var(--muted);">SOC Analyst</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:56px;padding-top:28px;border-top:1px solid var(--border);display:flex;align-items:center;flex-wrap:wrap;gap:12px;"><a href="case-005.html" style="font-size:13.5px;font-weight:600;color:var(--accent-2);">← ← CASE-005: AgentTesla</a><a href="case-003.html" style="font-size:13.5px;font-weight:600;color:var(--accent-2);margin-left:auto;">CASE-003: Phishing Simulation →</a></div>
+</div>
+</section>
+
+<style>
+@media(max-width:760px){
+  section > .wrap > div[style*="grid-template-columns:1fr 280px"]{grid-template-columns:1fr!important;}
+  div[style*="position:sticky"]{position:static!important;}
+}
+</style>
+
+<footer class="footer">
+  <p>© 2026 Robert Chimuanya Nwodu · SOC Analyst Portfolio · Built &amp; deployed on GitHub Pages</p>
+</footer></body></html>
